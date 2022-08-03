@@ -16,6 +16,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { Stack } from '@mui/material';
 import EmailVerify from './EmailVerify';
+import { Auth } from 'aws-amplify';
 
 
 
@@ -42,8 +43,19 @@ export default function CAStep4(props) {
         event.preventDefault();
         var temp = props.data
         console.log(temp)
-        setOpen("true")
-    };
+        Auth.signUp({
+            username: temp["Email"],
+            password: temp["Password"],
+            attributes: {
+                email: temp["Email"],
+                phone_number: '+1'+temp["P31"],
+                name: temp["FirstName"] + " " + temp["LastName"]
+            },
+        }).then(res=>{
+            console.log(res)
+            alert("Thank you for signing up! Please check your email for a verification link. If you have not recieved it then resend it from the profile page!")
+        }).catch(e=>{alert(e)})
+    }
 
 
 
