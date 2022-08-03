@@ -112,7 +112,7 @@ export default function CAStep4(props) {
                                             label="Bank Holder Name"
                                             name="Bank Holder Name"
                                             type="Bank Holder Name"
-                                            defaultValue= "Optional"
+                                            defaultValue="Optional"
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -202,7 +202,7 @@ export default function CAStep4(props) {
                             <Button
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2, width: "100%", alignSelf: "left", backgroundColor: "gray", marginTop: "auto" }}
-                                onClick={() => {props.buttonf("Step2") }}
+                                onClick={() => { props.buttonf("Step4") }}
                             >
                                 Back
                             </Button>
