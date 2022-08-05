@@ -121,7 +121,7 @@ const ResponsiveAppBar = () => {
                             </Button>
                         ))}
                     </Box>
-                    <Box sx={{ flexGrow: 0, display: "flex"}}>
+                    <Box sx={{ flexGrow: 0, display: "none"}}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" />
@@ -152,9 +152,9 @@ const ResponsiveAppBar = () => {
                     </Box>
                     <Box>
                         <Button variant="contained" backgroundColor="gray" 
-                        sx = {{display: "None", size: "small"}}
+                        sx = {{display: "flex", size: "small"}}
                         >
-                            Login
+                            <Link to="/login">Login</Link>
                         </Button>
                     </Box>
                 </Toolbar>
