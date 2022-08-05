@@ -6,6 +6,8 @@ import CAStep3 from './CreateAccount/CAStep3';
 import CAStep4 from './CreateAccount/CAStep4';
 import CAStep5 from './CreateAccount/CAStep5';
 import CAStep6 from './CreateAccount/CAStep6';
+import ResponsiveAppBar from "./NavBar"
+
 
 
 
@@ -17,18 +19,18 @@ export function CreateAccount() {
 
     switch (step) {
         case 'Step1':
-            return <CAStep1 buttonf={setStep} setData={setFormData} />
+            return (<div><ResponsiveAppBar/><CAStep1 buttonf={setStep} setData={setFormData} /></div>)
         case 'Step2':
-            return <CAStep2 buttonf={setStep} data={formData} setData={setFormData}/>
+            return (<div><ResponsiveAppBar/><CAStep2 buttonf={setStep} setData={setFormData} /></div>)
         case 'Step3':
-            return <CAStep3 buttonf={setStep} data={formData} setData={setFormData}/>
+            return (<div><ResponsiveAppBar/><CAStep3 buttonf={setStep} setData={setFormData} /></div>)
         case 'Step4':
-            return <CAStep4 buttonf={setStep} data={formData} setData={setFormData}/>
+            return (<div><ResponsiveAppBar/><CAStep4 buttonf={setStep} setData={setFormData} /></div>)
         case 'Step5':
-            return <CAStep5 buttonf={setStep} data={formData} setData={setFormData}/>
+            return (<div><ResponsiveAppBar/><CAStep5 buttonf={setStep} setData={setFormData} /></div>)
         case 'Step6':
-            return <CAStep6 buttonf={setStep} data={formData} setData={setFormData}/>
+            return (<div><ResponsiveAppBar/><CAStep6 buttonf={setStep} setData={setFormData} /></div>)
         default:
-            return <CAStep1 buttonf={setStep} setData={setFormData}/>
+            return (<div><ResponsiveAppBar/><CAStep1 buttonf={setStep} setData={setFormData} /></div>)
     }
 }

@@ -12,8 +12,9 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import { Link } from 'react-router-dom';
 
-const pages = ['Home', 'Products', 'Dashboard', "Contact Us"];
+const pages = [['Home',"/"], ['Products',"/"], ['Dashboard',"/dash"], ["Contact Us","/contact"]];
 const settings = ['Profile', 'Account', 'Logout'];
 
 const ResponsiveAppBar = () => {
@@ -112,11 +113,11 @@ const ResponsiveAppBar = () => {
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: "center" }}>
                         {pages.map((page) => (
                             <Button
-                                key={page}
+                                key={page[0]}
                                 onClick={handleCloseNavMenu}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
                             >
-                                {page}
+                                 <Link className="navbar-link-text inter-medium-mischka-14px" to={page[1]}>{page[0]}</Link>
                             </Button>
                         ))}
                     </Box>

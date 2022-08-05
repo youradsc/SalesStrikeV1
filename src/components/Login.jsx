@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ResponsiveAppBar from "./NavBar"
 
 
 function Copyright(props) {
@@ -40,6 +41,9 @@ export default function SignUp() {
     };
 
     return (
+        <div>
+        <ResponsiveAppBar/>
+
         <ThemeProvider theme={theme}>
             <Container component="main" disableGutters  maxWidth={false} maxHeight={false} sx={
                 {
@@ -153,5 +157,6 @@ export default function SignUp() {
                 <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>
+        </div>
     );
 }

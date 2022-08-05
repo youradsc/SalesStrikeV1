@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import Store from './Store/Store'
 import Cart from './Store/Cart'
+import ResponsiveAppBar from "./NavBar"
 
 
 
@@ -14,10 +15,10 @@ export default function MainStore() {
 
     switch (position) {
         case 'Store':
-            return <Store theCart={cart} setTheCart={setCart} theP={position} setP={setPosition} />
+            return (<div><ResponsiveAppBar/><Store theCart={cart} setTheCart={setCart} theP={position} setP={setPosition} /></div>)
         case 'Cart':
-            return <Cart theCart={cart} setTheCart={setCart} theP={position} setP={setPosition} />
+            return (<div><ResponsiveAppBar/><Cart theCart={cart} setTheCart={setCart} theP={position} setP={setPosition} /></div>)
         default:
-            return <Store theCart={cart} setTheCart={setCart} theP={position} setP={setPosition}/>
+            return (<div><ResponsiveAppBar/><Store theCart={cart} setTheCart={setCart} theP={position} setP={setPosition} /></div>)
     }
 }
