@@ -13,13 +13,32 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import { Link } from 'react-router-dom';
+import { Auth } from 'aws-amplify';
+
+
 
 const pages = [['Home',"/"], ['Products',"/"], ['Dashboard',"/dash"], ["Contact Us","/contact"]];
 const settings = ['Profile', 'Account', 'Logout'];
 
 const ResponsiveAppBar = () => {
+    const [user, setUser] = React.useState(null)
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    React.useEffect(() => {
+        if (user == null){
+            Auth.currentUserInfo().then((res)=>{
+                if (res != {}){
+                    Auth.currentAuthenticatedUser().then(res=>{setUser(res)}).catch(res=>{setUser(null)})
+                }
+            })
+        }
+    },[user])
+
+    const handleSignOut = () => {
+        Auth.signOut()
+        setUser(null)
+    }
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -153,8 +172,9 @@ const ResponsiveAppBar = () => {
                     <Box>
                         <Button variant="contained" backgroundColor="gray" 
                         sx = {{display: "flex", size: "small"}}
-                        >
-                            <Link to="/login">Login</Link>
+                        >{
+                            (user==null) ? <Link to="/login">Login</Link> : <Link to="/" onClick={handleSignOut}>Logout</Link>
+                        }
                         </Button>
                     </Box>
                 </Toolbar>

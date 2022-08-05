@@ -13,6 +13,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ResponsiveAppBar from "./NavBar"
+import { Auth } from 'aws-amplify';
+import { useNavigate } from 'react-router-dom';
+
 
 
 function Copyright(props) {
@@ -31,13 +34,15 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+    const navigate = useNavigate();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        var email = data.get('email')
+        var password = data.get('password')
+        Auth.signIn(email, password).then((res)=>{console.log(res); window.location.reload()}).catch((e)=>{console.log(e)})
+        navigate('/')
     };
 
     return (
