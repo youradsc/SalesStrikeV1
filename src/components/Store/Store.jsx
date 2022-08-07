@@ -16,6 +16,7 @@ import { TextField } from '@mui/material';
 import { useState, useEffect } from 'react'
 import { DialogTitle } from '@mui/material';
 import { Dialog } from '@mui/material';
+import axios from 'axios'
 
 function Copyright() {
     return (
@@ -36,116 +37,46 @@ const theme = createTheme();
 
 export default function Store(props) {
     const [cartPop, setCartPop] = useState(false)
+    const [prods, setProds] = useState([])
     const handleClose = () => {
         setCartPop(false)
     };
-    const cardData = [
-        {
-            sku: "1",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        },
-        {
-            sku: "2",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        },
-        {
-            sku: "3",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        }
-        ,
-        {
-            sku: "4",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        },
-        {
-            sku: "5",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        },
-        {
-            sku: "6",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        },
-        {
-            sku: "7",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        },
-        {
-            sku: "8",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        },
-        {
-            sku: "9",
-            title: "Push Up Board",
-            description: "This is a great push up board to get jacked on!",
-            wholesale: "12.99",
-            msrp: "38.99",
-            profit: "10 to 20%",
-            ideascore: "4/5",
-            image: "https://source.unsplash.com/random"
-        }
-    ]
+    React.useEffect(() => {
+        if(prods.length == 0) {
+                axios.get('https://api.salesstrikecorp.com/products/v1/getproducts').then((res)=>{console.log(res);setProds(Object.values(res.data))})
+            }
+        },[prods]
+    )
+    
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         var id = event.target.querySelector("input").getAttribute('id');
+        console.log(id)
         var qty = data.get("Qty");
-        var temp = [id, qty];
         var currCart = (props.theCart);
-        console.log(currCart);
-        var newStuff = (cardData).filter((card) => (
-            card.sku === id
+        console.log(prods)
+        var newStuff = (prods).filter((card) => (
+            card.Id === id
         ));
+        console.log(newStuff)
         var updateQuant = newStuff[0]
         updateQuant["Qty"] = qty
-        props.setTheCart([...props.theCart, updateQuant])
+        var i = 0;
+        var old = false;
+        (props.theCart).forEach(element => {
+            if (element.Id == id) {
+                var temp = element
+                temp["Qty"] = (parseInt(temp["Qty"])+parseInt(qty)).toString()
+                var replace = props.theCart
+                replace[i] = temp
+                props.setTheCart(replace)
+                old = true;
+            }
+        })
+        if (!old) {
+            props.setTheCart([...props.theCart, updateQuant])
+        }
         setCartPop(true);
     }
 
@@ -202,14 +133,14 @@ export default function Store(props) {
                 <Container sx={{ py: 2, maxWidth: { md: "md", lg: "lg" } }}>
                     {/* End hero unit */}
                     <Grid container spacing={4}>
-                        {cardData.map((card) => (
+                        {prods.map((card) => (
                             <Grid item key={card} xs={12} sm={6} md={4}>
                                 <Card
                                     sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                                 >
                                     <CardMedia
                                         component="img"
-                                        image={card.image}
+                                        image={card.Image}
                                         alt="random"
                                     //sx={{
                                     // 16:9
@@ -221,27 +152,27 @@ export default function Store(props) {
                                             {card.title}
                                         </Typography>
                                         <Typography>
-                                            <b>SKU:</b> {card.sku}
+                                            <b>SKU:</b> {card.Id}
                                         </Typography>
                                         <Typography>
-                                            <b>Description: </b> {card.description}
+                                            <b>Description: </b> {card.Description}
                                         </Typography>
                                         <Typography>
-                                            <b>Wholesale: </b> {card.wholesale}
+                                            <b>Wholesale: </b> {card.Wholesale}
                                         </Typography>
                                         <Typography>
-                                            <b>MSRP: $</b> {card.msrp}
+                                            <b>MSRP: $</b> {card.MSRP}
                                         </Typography>
                                         <Typography>
-                                            <b>Profit: </b> {card.profit}
+                                            <b>Profit: </b> {card.Profit}
                                         </Typography>
                                         <Typography>
-                                            <b>Idea Score: </b> {card.ideascore}
+                                            <b>Idea Score: </b> {card.Rating}
                                         </Typography>
                                     </CardContent>
                                     <CardActions disableSpacing={true}>
                                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "flex-start", md: "center" }, width: "100%" }}>
-                                            <TextField sx={{ width: { xs: "100%", md: "50%" } }} id={card.sku} label="Qty" name="Qty" variant="outlined" />
+                                            <TextField sx={{ width: { xs: "100%", md: "50%" } }} id={card.Id} label="Qty" name="Qty" variant="outlined" />
                                             <Button
                                                 size="small"
                                                 type="submit"
@@ -286,4 +217,16 @@ export default function Store(props) {
             </Dialog>
         </ThemeProvider>
     );
+    const cardData = [
+        {
+            sku: "1",
+            title: "Push Up Board",
+            description: "This is a great push up board to get jacked on!",
+            wholesale: "12.99",
+            msrp: "38.99",
+            profit: "10 to 20%",
+            ideascore: "4/5",
+            image: "https://source.unsplash.com/random"
+        },
+    ]
 }

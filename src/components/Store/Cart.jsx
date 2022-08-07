@@ -13,10 +13,8 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
-
-
-
-
+import axios from 'axios';
+import { Auth } from 'aws-amplify';
 
 export default function Cart(props) {
     const theme = useTheme();
@@ -24,10 +22,11 @@ export default function Cart(props) {
     console.log(props.theCart);
     var temp2 = 0;
     (props.theCart).forEach(element => {
-        temp2 = temp2 + ((parseFloat(element.Qty, 10))*(parseFloat(element.wholesale, 10)));
+        temp2 = temp2 + ((parseFloat(element.Qty, 10))*(parseFloat(element.Wholesale, 10)));
     });
     console.log(temp2)
     if(totalCost!=temp2){setTotalCost(temp2)};
+    console.log(props)
     function ProductRow(props) {
         return (
             <Card sx={{ display: "flex", flexDirection: "row" }}>
@@ -40,11 +39,11 @@ export default function Cart(props) {
                     <Box sx={{ display: 'flex', flexGrow: 1, alignSelf: "stretch", flexDirection: "row", pl: 1, pb: 1 }}>
                         <Box sx={{ display: "flex", flexDirection: "column" }}>
                             <Typography>Push Up Board</Typography>
-                            <Typography>SKU: {props.data.sku}, Qty: {props.data.Qty} </Typography>
+                            <Typography>SKU: {props.data.Id}, Qty: {props.data.Qty} </Typography>
                             <Typography> Unit Cost: {props.data.wholesale}</Typography>
                         </Box>
                         <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "auto" }}>
-                            <Typography> Total: {(parseFloat(props.data.Qty, 10) * parseFloat(props.data.wholesale, 10))}</Typography>
+                            <Typography> Total: {(parseFloat(props.data.Qty, 10) * parseFloat(props.data.Wholesale, 10))}</Typography>
                             <EditIcon aria-label="play/pause" sx={{ marginLeft: "auto" }}>
                                 <PlayArrowIcon sx={{ height: 38, width: 38 }} />
                             </EditIcon>
@@ -53,6 +52,20 @@ export default function Cart(props) {
                 </CardContent>
             </Card>
         );
+    }
+    
+    const handleCheckout = () => {
+        var body = {};
+        var email = "";
+        (props.theCart).forEach(element => {
+            body[element.Id] = element.Qty
+        })
+        console.log(body)
+        Auth.currentUserInfo().then(res=>{
+            axios.post('https://api.salesstrikecorp.com/inventory/v1/adduserorders?email='+res.username,JSON.stringify(body))
+                .then(res=>{window.location.replace(res.data)}).catch((err)=>{console.log(err)}); console.log(res.username)})
+            .catch(err=>{console.log(err)})
+        
     }
 
     function Copyright(props) {
@@ -152,6 +165,7 @@ export default function Cart(props) {
                             type="submit"
                             variant="contained"
                             sx={{ mt: 3, mb: 2, mx: 2 }}
+                            onClick={handleCheckout}
 
                         >
                             Checkout
