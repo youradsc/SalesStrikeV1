@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import Amplify from 'aws-amplify';
 import cognito from './config'
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 Amplify.configure({
   Auth: {
@@ -16,9 +18,11 @@ Amplify.configure({
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <BrowserRouter>
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
