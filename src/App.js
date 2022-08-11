@@ -1,23 +1,18 @@
+import Router from './routes';
+// theme
+import ThemeProvider from './theme';
+// components
+import ScrollToTop from './components/ScrollToTop';
+import { BaseOptionChartStyle } from './components/chart/BaseOptionChart';
 
-import MainStore from "./components/MainStore"
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-//import SignUp from "./components/Login";
-import { CreateAccount } from "./components/CreateAccount";
-import Login from "./components/Login";
-import Home from "./components/Home"
+// ----------------------------------------------------------------------
 
-function App() {
+export default function App() {
   return (
-    <BrowserRouter>
-    <Routes>
-      <Route path="/" element = {<Home />}/>
-      <Route path="/signup" element={<CreateAccount/>} />
-      <Route path="/login" element = {<Login/>}/>
-      <Route path="/store" element = {<MainStore/>} />
-    </Routes>
-    </BrowserRouter>
-
+    <ThemeProvider>
+      <ScrollToTop />
+      <BaseOptionChartStyle />
+      <Router />
+    </ThemeProvider>
   );
 }
-
-export default App;
