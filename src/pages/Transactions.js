@@ -17,6 +17,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Box
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -27,6 +28,8 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
+import Withdrawls from '../components/withdrawls';
+import Purchases from '../components/purchases';
 
 // ----------------------------------------------------------------------
 
@@ -74,7 +77,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function Transactions() {
+export default function Sales() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -136,104 +139,11 @@ export default function Transactions() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+
   return (
-    <Page title="User" >
-      <Container sx={{marginTop:10}}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Transactions
-          </Typography>
-        </Stack>
-        <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified, qty, days, cost, returned, remaining, sold  } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
-
-                    return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
-                        <TableCell align="left">{id}</TableCell>
-                        <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'Pre-order' ? 'info' : 'success')}>
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell>
-                        <TableCell align="left">{qty}</TableCell>
-                       
-                        <TableCell align="left">{days}</TableCell>
-                        <TableCell align="left">{cost}</TableCell>
-                        <TableCell align="left">{returned}</TableCell>
-                        <TableCell align="left">{remaining}</TableCell>
-                        <TableCell align="left">{sold}</TableCell>
-                        <TableCell align="right">
-                          <UserMoreMenu />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-
-                {isUserNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Card>
-      </Container>
+    <Page title="User" sx={{marginTop:10}} >
+      <Purchases/>
+      <Withdrawls />
     </Page>
   );
 }

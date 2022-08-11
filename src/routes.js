@@ -9,6 +9,7 @@ import Sales from './pages/Sales';
 import Transactions from './pages/Transactions';
 //import Login from './pages/Login';
 import NotFound from './pages/Page404';
+import ComingSoon from './pages/Comingsoon';
 import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
@@ -31,8 +32,6 @@ export default function Router() {
         { path: 'inventory', element: <Inventory /> },
         { path: 'sales', element: <Sales /> },
         { path: 'transactions', element: <Transactions /> },
-
-
       ],
     },
     {
@@ -45,6 +44,7 @@ export default function Router() {
         { path: 'login', element: <Login /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
+        {path: 'comingsoon', element: <ComingSoon />}
       ],
     },
     { path: '*', element: <Navigate to="/404" replace /> },

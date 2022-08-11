@@ -17,7 +17,7 @@ import { Auth } from 'aws-amplify';
 
 
 
-const pages = [['Home',"/"], ['Products',"/"], ['Dashboard',"/dash"], ["Contact Us","/contact"]];
+const pages = [['Home',"/"], ['Products',"/store"], ['Dashboard',"/dashboard"], ["Contact Us","/contact"]];
 const settings = ['Profile', 'Account', 'Logout'];
 
 const ResponsiveAppBar = () => {

@@ -13,6 +13,12 @@ import { CardActionArea, Card, CardActions, CardContent, CardMedia } from "@mui/
 // --- Style --- //
 
 export default function AppBankManagement() {
+  const data = {
+    bankNumber: 1234567,
+    routingNumber: 9028408,
+    account: "Wells Fargo",
+    total: 453.09
+  }
 
   return (
         <Card>
@@ -25,24 +31,45 @@ export default function AppBankManagement() {
               title="Contemplative Reptile"
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Lizard
+              <Typography gutterBottom variant="h4" component="h2">
+                Bank Management
               </Typography>
               <Typography
-                variant="body2"
+                variant="h5"
                 component="p"
               >
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                Balance : {data.total}
+              </Typography>
+              <Typography
+                variant="body1"
+                component="p"
+              >
+                Account : {data.account}
+              </Typography>
+              <Typography
+                variant="body1"
+                component="p"
+              >
+                Routing Number : {data.routingNumber}
+              </Typography>
+              <Typography
+                variant="body1"
+                component="p"
+              >
+                Account Number : {data.bankNumber}
               </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
+            {data.bankNumber || data.bankNumber === 0 ?
             <Button size="small" color="primary">
-              Share
-            </Button>
+            Withdraw
+          </Button> :
+            <Button size="small" color="primary" disabled>
+              Withdraw
+            </Button>}
             <Button size="small" color="primary">
-              Learn More
+              Add/Updated Bank Info
             </Button>
           </CardActions>
         </Card>
