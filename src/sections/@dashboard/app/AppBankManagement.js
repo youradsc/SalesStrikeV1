@@ -18,9 +18,10 @@ export default function AppBankManagement() {
         <Card>
           <CardActionArea>
             <CardMedia
-              media="picture"
+             component="img"
+              height="0"
               alt="Contemplative Reptile"
-              image="/material-ui-lizard.jpg"
+              image="/static/mock-images/products/product_1.jpg"
               title="Contemplative Reptile"
             />
             <CardContent>

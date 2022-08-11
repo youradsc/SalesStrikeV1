@@ -31,11 +31,15 @@ import USERLIST from '../_mock/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'name', label: 'Product Name', alignRight: false },
+  { id: 'id', label: 'SKU', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
+  { id: 'qty', label: "Qty", alignRight: false},
+  { id: 'days', label: "Days Passed", alignRight: false},
+  { id: 'cost', label: "Cost", alignRight: false},
+  { id: 'returned', label: "Returned", alignRight: false},
+  { id: 'remaining', label: "Remaining Inventory", alignRight: false},
+  { id: 'sold', label: "Sold Inventory", alignRight: false},
   { id: '' },
 ];
 
@@ -70,7 +74,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Inventory() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -133,17 +137,16 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User">
-      <Container>
+    <Page title="User" >
+      <Container sx={{marginTop:10}}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Inventory
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New User
+          <Button variant="contained" component={RouterLink} to="/store" startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Product
           </Button>
         </Stack>
-
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -161,7 +164,7 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, role, status, company, avatarUrl, isVerified, qty, days, cost, returned, remaining, sold  } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -184,15 +187,19 @@ export default function User() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="left">{id}</TableCell>
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
+                          <Label variant="ghost" color={(status === 'Pre-order' ? 'info' : 'success')}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
-
+                        <TableCell align="left">{qty}</TableCell>
+                       
+                        <TableCell align="left">{days}</TableCell>
+                        <TableCell align="left">{cost}</TableCell>
+                        <TableCell align="left">{returned}</TableCell>
+                        <TableCell align="left">{remaining}</TableCell>
+                        <TableCell align="left">{sold}</TableCell>
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>

@@ -19,18 +19,18 @@ export function CreateAccount() {
 
     switch (step) {
         case 'Step1':
-            return (<div><ResponsiveAppBar/><CAStep1 buttonf={setStep} setData={setFormData} /></div>)
+            return (<div><ResponsiveAppBar/><CAStep1 buttonf={setStep} setData={setFormData} data={formData} /></div>)
         case 'Step2':
-            return (<div><ResponsiveAppBar/><CAStep2 buttonf={setStep} setData={setFormData} /></div>)
+            return (<div><ResponsiveAppBar/><CAStep2 buttonf={setStep} setData={setFormData} data={formData}/></div>)
         case 'Step3':
-            return (<div><ResponsiveAppBar/><CAStep3 buttonf={setStep} setData={setFormData} /></div>)
+            return (<div><ResponsiveAppBar/><CAStep3 buttonf={setStep} setData={setFormData} data={formData}/></div>)
         case 'Step4':
-            return (<div><ResponsiveAppBar/><CAStep4 buttonf={setStep} setData={setFormData} /></div>)
+            return (<div><ResponsiveAppBar/><CAStep4 buttonf={setStep} setData={setFormData} data={formData}/></div>)
         case 'Step5':
-            return (<div><ResponsiveAppBar/><CAStep5 buttonf={setStep} setData={setFormData} /></div>)
+            return (<div><ResponsiveAppBar/><CAStep5 buttonf={setStep} setData={setFormData} data={formData}/></div>)
         case 'Step6':
-            return (<div><ResponsiveAppBar/><CAStep6 buttonf={setStep} setData={setFormData} /></div>)
+            return (<div><ResponsiveAppBar/><CAStep6 buttonf={setStep} setData={setFormData} data={formData}/></div>)
         default:
-            return (<div><ResponsiveAppBar/><CAStep1 buttonf={setStep} setData={setFormData} /></div>)
+            return (<div><ResponsiveAppBar/><CAStep1 buttonf={setStep} setData={setFormData} data={formData}/></div>)
     }
 }
