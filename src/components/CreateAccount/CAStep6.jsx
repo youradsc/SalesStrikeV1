@@ -17,8 +17,8 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { Stack } from '@mui/material';
 import EmailVerify from './EmailVerify';
 import { Auth } from 'aws-amplify';
-
-
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 
 function Copyright(props) {
@@ -38,11 +38,13 @@ const theme = createTheme();
 
 
 export default function CAStep4(props) {
+    let navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
     const handleSubmit = (event) => {
         event.preventDefault();
         var temp = props.data
         console.log(temp)
+        axios.post()
         Auth.signUp({
             username: temp["Email"],
             password: temp["Password"],
@@ -53,8 +55,17 @@ export default function CAStep4(props) {
             },
         }).then(res=>{
             console.log(res)
+            Auth.signIn(temp["Email"], temp["Password"]).then((res)=>{console.log(res)}).catch((e)=>{console.log(e)})
             alert("Thank you for signing up! Please check your email for a verification link. If you have not recieved it then resend it from the profile page!")
         }).catch(e=>{alert(e)})
+        var body = {
+            AccountNumber: parseInt(temp["AccountNumber"]),
+            RoutingNumber: parseInt(temp["RoutingNumber"]),
+            BankName: temp["BankHolderName"],
+            Phone: parseInt(temp["P31"]),
+            AccountType: temp["p32"]
+        }
+        axios.post('https://api.salesstrikecorp.com/users/v1/adduserdata?email='+temp["Email"],JSON.stringify(body)).then(res=>{console.log(res);  navigate("../", { replace: true });}).catch(e=>{console.log(e); alert(e)})
     }
 
 

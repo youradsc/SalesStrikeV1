@@ -8,8 +8,6 @@ import { Button } from '@mui/material';
 
 
 export default function EmailVerify(props) {
-
-
     const handleClose = () => {
         console.log("done");
         props.changeState(false)
@@ -21,7 +19,6 @@ export default function EmailVerify(props) {
         console.log(temp)
         props.changeState(false)
     };
-
 
     return (
         <Dialog onClose={handleClose} open={props.open} >
