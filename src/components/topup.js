@@ -2,6 +2,7 @@ import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import SimpleBarReact from 'simplebar-react';
 // material
 import {
   Card,
@@ -26,7 +27,7 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/sales';
+import USERLIST from '../_mock/topup';
 
 // ----------------------------------------------------------------------
 
@@ -34,13 +35,9 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Product Name', alignRight: false },
   { id: 'id', label: 'SKU', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  { id: 'qty', label: "Qty", alignRight: false},
-  { id: 'days', label: "Days Passed", alignRight: false},
-  { id: 'sale', label: "Total Sales", alignRight: false},
-  { id: 'tprofit', label: "Total Profit", alignRight: false},
-  { id: 'yprofit', label: "Your Profit", alignRight: false},
-  { id: 'return', label: "Return", alignRight: false},
-  { id: 'irr', label: "IRR", alignRight: false},
+  { id: 'remaining', label: "Remaining Inventory", alignRight: false},
+  { id: 'cost', label: "Cost", alignRight: false},
+  { id: 'suggested', label: "Suggested Qty", alignRight: false},
   { id: '' },
 ];
 
@@ -75,7 +72,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function Sales() {
+export default function Topup() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -138,18 +135,19 @@ export default function Sales() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User" >
-      <Container sx={{marginTop:10}}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Sales
-          </Typography>
-        </Stack>
+        
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" margin={3}>
+          <Typography variant="h4" gutterBottom>
+            Top Up
+          </Typography>
+          <Button variant="contained" component={RouterLink} to="/store" startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Product
+          </Button>
+        </Stack>
+        
+          <TableContainer sx={{ minWidth: 800 }}>
+          
               <Table>
                 <UserListHead
                   order={order}
@@ -161,8 +159,9 @@ export default function Sales() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
+                
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, status, avatarUrl, irr, qty, days, sale, tprofit, yprofit, returned  } = row;
+                    const { id, name, status, avatarUrl, qty, remaining, cost, suggested  } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -191,40 +190,20 @@ export default function Sales() {
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
-                        <TableCell align="left">{qty}</TableCell>
-                       
-                        <TableCell align="left">{days}</TableCell>
-                        <TableCell align="left">{sale}</TableCell>
-                        <TableCell align="left">{tprofit}</TableCell>
-                        <TableCell align="left">{yprofit}</TableCell>
-                        <TableCell align="left">{returned}</TableCell>
-                        <TableCell align="left">{irr}</TableCell>
+                        <TableCell align="left">{remaining}</TableCell>
+                        <TableCell align="left">{cost}</TableCell>
+                        <TableCell align="left">{suggested}</TableCell>
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
                       </TableRow>
                     );
                   })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
                 </TableBody>
-
-                {isUserNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
               </Table>
+              
             </TableContainer>
-          </Scrollbar>
-
+            
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
@@ -235,7 +214,6 @@ export default function Sales() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
-      </Container>
-    </Page>
+
   );
 }

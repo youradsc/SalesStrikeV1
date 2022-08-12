@@ -19,6 +19,8 @@ import {
   AppBankManagement
 } from '../sections/@dashboard/app';
 
+import Topup from '../components/topup';
+
 // ----------------------------------------------------------------------
 const data =
 {
@@ -53,39 +55,11 @@ export default function DashboardApp() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Average IRR" total={data["IRR"]} color="error" icon={'ant-design:bug-filled'} />
           </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
-            <AppNewsUpdate
-              title="News Update"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: faker.name.jobTitle(),
-                description: faker.name.jobTitle(),
-                image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppOrderTimeline
-              title="Order Timeline"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: [
-                  '1983, orders, $4220',
-                  '12 Invoices have been paid',
-                  'Order #37745 from September',
-                  'New order placed #XF-2356',
-                  'New order placed #XF-2346',
-                ][index],
-                type: `order${index + 1}`,
-                time: faker.date.past(),
-              }))}
-            />
-          </Grid>
           <Grid item xs={12} md={6} lg={4}>
             <AppBankManagement/>
+          </Grid>
+          <Grid item xs={12} md={8} lg={8}>
+            <Topup/>
           </Grid>
         </Grid>
       </Container>

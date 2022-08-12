@@ -17,6 +17,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Box
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -26,21 +27,17 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/sales';
+import USERLIST from '../_mock/withdrawls';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Product Name', alignRight: false },
-  { id: 'id', label: 'SKU', alignRight: false },
+  { id: 'date', label: 'Date', alignRight: false },
+  { id: 'id', label: 'Transaction ID', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  { id: 'qty', label: "Qty", alignRight: false},
-  { id: 'days', label: "Days Passed", alignRight: false},
-  { id: 'sale', label: "Total Sales", alignRight: false},
-  { id: 'tprofit', label: "Total Profit", alignRight: false},
-  { id: 'yprofit', label: "Your Profit", alignRight: false},
-  { id: 'return', label: "Return", alignRight: false},
-  { id: 'irr', label: "IRR", alignRight: false},
+  { id: 'amount', label: "Amount", alignRight: false},
+  { id: 'bank', label: "Acct Number", alignRight: false},
+  { id: 'routing', label: "Routing Number", alignRight: false},
   { id: '' },
 ];
 
@@ -75,7 +72,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function Sales() {
+export default function Withdrawls() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -137,18 +134,18 @@ export default function Sales() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
-  return (
-    <Page title="User" >
-      <Container sx={{marginTop:10}}>
+
+  return (  
+      <Container sx={{marginTop:2}} disableGutters>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Sales
+          <Typography variant="h4">
+            Withdrawls
           </Typography>
         </Stack>
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          <Scrollbar>
+          
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
@@ -162,8 +159,8 @@ export default function Sales() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, status, avatarUrl, irr, qty, days, sale, tprofit, yprofit, returned  } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                    const { id, date, amount, bank, routing, status} = row;
+                    const isItemSelected = selected.indexOf(id) !== -1;
 
                     return (
                       <TableRow
@@ -175,56 +172,28 @@ export default function Sales() {
                         aria-checked={isItemSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
+                        <TableCell align="left">{date}</TableCell>
                         <TableCell align="left">{id}</TableCell>
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'Pre-order' ? 'info' : 'success')}>
+                          <Label variant="ghost" color={(status === 'Pending' ? 'info' : 'success')}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
-                        <TableCell align="left">{qty}</TableCell>
+                        <TableCell align="left">{amount}</TableCell>
                        
-                        <TableCell align="left">{days}</TableCell>
-                        <TableCell align="left">{sale}</TableCell>
-                        <TableCell align="left">{tprofit}</TableCell>
-                        <TableCell align="left">{yprofit}</TableCell>
-                        <TableCell align="left">{returned}</TableCell>
-                        <TableCell align="left">{irr}</TableCell>
+                        <TableCell align="left">{bank}</TableCell>
+                        <TableCell align="left">{routing}</TableCell>
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
                       </TableRow>
                     );
                   })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
                 </TableBody>
-
-                {isUserNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
               </Table>
             </TableContainer>
-          </Scrollbar>
-
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
@@ -236,6 +205,5 @@ export default function Sales() {
           />
         </Card>
       </Container>
-    </Page>
   );
 }
