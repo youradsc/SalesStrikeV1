@@ -29,8 +29,6 @@ import { useState } from 'react';
 
 export default function DashboardApp() {
   const theme = useTheme();
-  const [tableData, setTableData] = useState([]);
-  
   var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
   var total = Inventory[Inventory.length - 1]
   console.log(total)

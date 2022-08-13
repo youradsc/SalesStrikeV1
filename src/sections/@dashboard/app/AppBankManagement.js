@@ -9,10 +9,12 @@ import { Typography, Button } from "@mui/material";
 
 // --- Fill Image Card Component Imports --- //
 import { CardActionArea, Card, CardActions, CardContent, CardMedia } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 // --- Style --- //
 
 export default function AppBankManagement() {
+  const navigate = useNavigate()
   const data = {
     bankNumber: 1234567,
     routingNumber: 9028408,
@@ -68,7 +70,7 @@ export default function AppBankManagement() {
             <Button size="small" color="primary" disabled>
               Withdraw
             </Button>}
-            <Button size="small" color="primary">
+            <Button size="small" color="primary" onClick={()=>(navigate("/addbank"))}>
               Add/Updated Bank Info
             </Button>
           </CardActions>
