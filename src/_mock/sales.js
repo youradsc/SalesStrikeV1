@@ -18,4 +18,5 @@ const sales = [...Array(24)].map((_, index) => ({
   
 }));
 
+// currently theres no returned and theres no days column
 export default sales;
