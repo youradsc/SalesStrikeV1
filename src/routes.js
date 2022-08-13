@@ -18,6 +18,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 //import SignUp from "./components/Login";
 import { CreateAccount } from "./components/CreateAccount";
 import Login from "./components/Login";
+import Home from './components/Home';
 
 
 // ----------------------------------------------------------------------
@@ -38,7 +39,7 @@ export default function Router() {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/store" /> },
+        { path: '/', element: <Home /> },
         { path: 'store', element: <MainStore /> },
         { path: 'signup', element: <CreateAccount /> },
         { path: 'login', element: <Login /> },
@@ -47,6 +48,6 @@ export default function Router() {
         {path: 'comingsoon', element: <ComingSoon />}
       ],
     },
-    { path: '*', element: <Navigate to="/404" replace /> },
+    { path: '*', element: <Navigate to="/404" replace /> }
   ]);
 }

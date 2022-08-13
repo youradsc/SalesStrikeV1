@@ -27,6 +27,8 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
+import { useOutletContext } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -34,12 +36,11 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Product Name', alignRight: false },
   { id: 'id', label: 'SKU', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  { id: 'qty', label: "Qty", alignRight: false},
-  { id: 'days', label: "Days Passed", alignRight: false},
-  { id: 'cost', label: "Cost", alignRight: false},
-  { id: 'returned', label: "Returned", alignRight: false},
-  { id: 'remaining', label: "Remaining Inventory", alignRight: false},
-  { id: 'sold', label: "Sold Inventory", alignRight: false},
+  { id: 'qtyheld', label: "Inventory Remaining", alignRight: false},
+  { id: 'qtySold', label: "Inventory Sold", alignRight: false},
+  { id: 'totalcost', label: "Current Cost", alignRight: false},
+  { id: 'totalsales', label: "Current Sales", alignRight: false},
+  { id: 'roi', label: "ROI", alignRight: false},
   { id: '' },
 ];
 
@@ -75,6 +76,37 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Inventory() {
+  const [tableData, setTableData] = useState([]);
+  var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
+  Products = Object.values(Products)
+  useEffect(()=>{
+    if(tableData.length === 0){
+    Inventory.map((inventory)=>{
+      if(inventory.Name !== "Total"){
+        console.log(inventory.Name)
+        var tempid = inventory.ID
+        var productData = Products.filter((productData)=>(productData.Id === tempid))[0]
+        console.log(productData)
+        var outTemp = {}
+        outTemp.id = tempid;
+        outTemp.avatarUrl = productData.Image;
+        outTemp.name = inventory.Name;
+        outTemp.status = "In-Stock";
+        outTemp.qtyheld = inventory.TotalUnitsHeld;
+        outTemp.qtySold = inventory.TotalUnitsSold;
+        outTemp.totalcost = inventory.TotalDollarsHeld;
+        outTemp.totalsales = inventory.TotalDollarsSold;
+        outTemp.roi = inventory.ROIPercent;
+        console.log(outTemp)
+        setTableData(oldData => [...oldData, outTemp])
+      }
+    })}
+  },[tableData])
+  console.log(tableData)
+  const USERLIST = tableData
+
+ 
+
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -137,7 +169,7 @@ export default function Inventory() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User" >
+
       <Container sx={{marginTop:10}}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
@@ -164,7 +196,7 @@ export default function Inventory() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified, qty, days, cost, returned, remaining, sold  } = row;
+                    const { id, name, status, avatarUrl, qtyheld, qtySold, totalcost, totalsales, roi} = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -193,13 +225,12 @@ export default function Inventory() {
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
-                        <TableCell align="left">{qty}</TableCell>
+                        <TableCell align="left">{qtyheld} Units</TableCell>
                        
-                        <TableCell align="left">{days}</TableCell>
-                        <TableCell align="left">{cost}</TableCell>
-                        <TableCell align="left">{returned}</TableCell>
-                        <TableCell align="left">{remaining}</TableCell>
-                        <TableCell align="left">{sold}</TableCell>
+                        <TableCell align="left">{qtySold} Units</TableCell>
+                        <TableCell align="left">${totalcost}</TableCell>
+                        <TableCell align="left">${totalsales}</TableCell>
+                        <TableCell align="left">{roi}%</TableCell>
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
@@ -237,6 +268,6 @@ export default function Inventory() {
           />
         </Card>
       </Container>
-    </Page>
+
   );
 }

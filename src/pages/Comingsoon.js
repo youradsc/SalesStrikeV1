@@ -21,7 +21,6 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function ComingSoon() {
   return (
-    <Page title="404 Page Not Found">
       <Container>
         <ContentStyle sx={{ textAlign: 'center', alignItems: 'center' }}>
           <Typography variant="h3" paragraph>
@@ -43,6 +42,5 @@ export default function ComingSoon() {
           </Button>
         </ContentStyle>
       </Container>
-    </Page>
   );
 }

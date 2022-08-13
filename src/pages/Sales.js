@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
@@ -17,6 +17,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  getTableHeadUtilityClass,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -26,7 +27,8 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/sales';
+//import USERLIST from '../_mock/sales';
+import { useOutletContext } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -35,17 +37,13 @@ const TABLE_HEAD = [
   { id: 'id', label: 'SKU', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: 'qty', label: "Qty", alignRight: false},
-  { id: 'days', label: "Days Passed", alignRight: false},
-  { id: 'sale', label: "Total Sales", alignRight: false},
+  { id: 'cost', label: "Unit Cost", alignRight: false},
+  { id: 'uprofit', label: "Unit Profit", alignRight: false},
   { id: 'tprofit', label: "Total Profit", alignRight: false},
-  { id: 'yprofit', label: "Your Profit", alignRight: false},
-  { id: 'return', label: "Return", alignRight: false},
-  { id: 'irr', label: "IRR", alignRight: false},
+  { id: 'roi', label: "ROI", alignRight: false},
   { id: '' },
 ];
-
 // ----------------------------------------------------------------------
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -76,6 +74,33 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Sales() {
+  const [tableData, setTableData] = useState([]);
+  var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
+  
+  Products = Object.values(Products)
+  useEffect(()=>{
+    if(tableData.length === 0){
+    Sales.map((sale)=>{
+      var tempid = sale.ID
+      var productData = Products.filter((productData)=>(productData.Id === tempid))[0]
+      console.log(productData)
+      var outTemp = {}
+      outTemp.id = tempid;
+      outTemp.avatarUrl = productData.Image;
+      outTemp.name = sale.Name;
+      outTemp.status = "Complete";
+      outTemp.qty = sale.Qty;
+      outTemp.cost = sale.UnitCostBasis;
+      outTemp.uprofit = sale.UnitProfit;
+      outTemp.tprofit = sale.TotalProfitUser;
+      outTemp.roi = sale.ROI;
+      console.log(outTemp)
+      setTableData(oldData => [...oldData, outTemp])
+    })}
+  },[tableData])
+  console.log(tableData)
+  const USERLIST = tableData
+  
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -138,7 +163,6 @@ export default function Sales() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User" >
       <Container sx={{marginTop:10}}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
@@ -162,7 +186,7 @@ export default function Sales() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, status, avatarUrl, irr, qty, days, sale, tprofit, yprofit, returned  } = row;
+                    const { id, name, status, avatarUrl, roi, qty, uprofit, tprofit, cost  } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -193,12 +217,10 @@ export default function Sales() {
                         </TableCell>
                         <TableCell align="left">{qty}</TableCell>
                        
-                        <TableCell align="left">{days}</TableCell>
-                        <TableCell align="left">{sale}</TableCell>
-                        <TableCell align="left">{tprofit}</TableCell>
-                        <TableCell align="left">{yprofit}</TableCell>
-                        <TableCell align="left">{returned}</TableCell>
-                        <TableCell align="left">{irr}</TableCell>
+                        <TableCell align="left">${cost}</TableCell>
+                        <TableCell align="left">${uprofit}</TableCell>
+                        <TableCell align="left">${tprofit}</TableCell>
+                        <TableCell align="left">{roi}%</TableCell>
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
@@ -236,6 +258,5 @@ export default function Sales() {
           />
         </Card>
       </Container>
-    </Page>
   );
 }
