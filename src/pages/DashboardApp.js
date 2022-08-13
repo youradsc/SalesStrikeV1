@@ -26,8 +26,7 @@ import { useOutletContext } from "react-router-dom";
 
 export default function DashboardApp() {
   const theme = useTheme();
-  const [allData, setAllData] = useOutletContext();
-  const {Inventory, Orders, Products, Sales} = allData
+  var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
   var total = Inventory[Inventory.length - 1]
   console.log(total)
   const data ={
