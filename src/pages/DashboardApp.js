@@ -21,13 +21,17 @@ import {
 
 import Topup from '../components/topup';
 import { useOutletContext } from "react-router-dom";
+import { useState } from 'react';
+
+
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
-  const [allData, setAllData] = useOutletContext();
-  const {Inventory, Orders, Products, Sales} = allData
+  const [tableData, setTableData] = useState([]);
+  
+  var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
   var total = Inventory[Inventory.length - 1]
   console.log(total)
   const data ={
@@ -35,7 +39,6 @@ export default function DashboardApp() {
     ATC: total.TotalDollarsHeld,
     PT: total.ProductTurnOver,
     ROI: total.ROIPercent
-
   }
   return (
     

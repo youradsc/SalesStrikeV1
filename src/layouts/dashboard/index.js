@@ -8,6 +8,7 @@ import DashboardSidebar from './DashboardSidebar';
 import ResponsiveAppBar from '../../components/NavBar';
 import DataSouce from '../../components/datasource'
 import axios from 'axios';
+import { Auth } from 'aws-amplify';
 
 
 // ----------------------------------------------------------------------
@@ -48,10 +49,11 @@ const MainStyle = styled('div')(({ theme }) => ({
 export default function DashboardLayout() {
   const [allData, setAllData] = useState([])
   useEffect(() => {
+    Auth.currentUserInfo().then((res)=>{
     if (allData.length === 0) {
-      axios.get("https://api.salesstrikecorp.com/inventory/v1/getuserdashboard?email=" + "saihanumanv@gmail.com")
+      axios.get("https://api.salesstrikecorp.com/inventory/v1/getuserdashboard?email=" + res.username)
         .then(res => { console.log(res); setAllData(res.data); localStorage.setItem("allData", JSON.stringify(res.data)) }).catch((err) => { console.log(err) })
-    }
+    }})
   }, [allData])
   const [open, setOpen] = useState(false);
   
