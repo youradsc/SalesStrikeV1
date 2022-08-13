@@ -15,6 +15,9 @@ import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
 import { Stack } from '@mui/material';
+import { Auth } from 'aws-amplify';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 
 function Copyright(props) {
@@ -33,11 +36,25 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function AddBank() {
+    let navigate = useNavigate()
     const handleSubmit = (event) => {
         event.preventDefault();
+        const data = new FormData(event.currentTarget)
+        var holderName = data.get("Bank Holder Name")
+        var routing = data.get("Routing Number")
+        var account = data.get("Account Number")
+        console.log(holderName)
+        console.log(routing)
+        console.log(account)
+        var body = {
+            AccountNumber: parseInt(account),
+            RoutingNumber: parseInt(routing),
+            BankName: holderName
+        }
+        Auth.currentUserInfo().then((res) => {
+            axios.post('https://api.salesstrikecorp.com/users/v1/adduserdata?email='+res.username,JSON.stringify(body)).then(res=>{console.log(res);  navigate("../", { replace: true });}).catch(e=>{console.log(e); alert(e)})
+        })
     };
-
-
 
     return (
         <ThemeProvider theme={theme}>
