@@ -73,6 +73,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Topup() {
+  
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -146,9 +147,9 @@ export default function Topup() {
           </Button>
         </Stack>
         
-          <TableContainer sx={{ minWidth: 800 }}>
+          <TableContainer sx={{ minWidth: 800, overflowX: "scroll" }}>
           
-              <Table>
+              <Table sx={{ width: "max-content", overflowX: "scroll" }}>
                 <UserListHead
                   order={order}
                   orderBy={orderBy}

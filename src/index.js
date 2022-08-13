@@ -19,9 +19,9 @@ Amplify.configure({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <HelmetProvider>
+    
       <App />
-    </HelmetProvider>
+    
   </BrowserRouter>
 );
 

@@ -27,7 +27,8 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/purchases';
+//import USERLIST from '../_mock/purchases';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -35,10 +36,9 @@ const TABLE_HEAD = [
   { id: 'date', label: 'Date', alignRight: false },
   { id: 'name', label: 'Product Name', alignRight: false },
   { id: 'sku', label: 'SKU', alignRight: false },
-  { id: 'transactionID', label: 'ID', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: 'qty', label: "Qty", alignRight: false},
-  { id: 'cost', label: "Cost", alignRight: false},
+  { id: 'ucost', label: "Unit Cost", alignRight: false},
   { id: 'tcost', label: "Total Cost", alignRight: false},
   { id: '' },
 ];
@@ -75,6 +75,30 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Purchases() {
+  const [tableData, setTableData] = useState([]);
+  var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
+  console.log(Orders)
+  Products = Object.values(Products)
+  useEffect(()=>{
+    if(tableData.length === 0){
+    Orders.map((order)=>{
+      console.log("hit")
+      var tempid = order.ID
+      var productData = Products.filter((productData)=>(productData.Id === tempid))[0]
+      var outTemp = {}
+      outTemp.id = tempid;
+      outTemp.date = order.Date
+      outTemp.avatarUrl = productData.Image;
+      outTemp.name = order.Name;
+      outTemp.status = order.Status;
+      outTemp.qty = order.Qty;
+      outTemp.ucost = order.UnitCost;
+      outTemp.tcost = order.TotalCost;
+      setTableData(oldData => [...oldData, outTemp])
+    })}
+  },[tableData])
+  const USERLIST = tableData
+
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -138,7 +162,7 @@ export default function Purchases() {
 
 
   return (  
-      <Container sx={{marginTop:2}} disableGutters>
+      <Container sx={{marginTop:10}} disableGutters>
       <Box sx={{display:"block", maxWidth: 1200, marginX: "auto", justifyContent: "center"}}>
       <Typography variant="h3" sx={{justifySelf:"center"}}>
             Transactions
@@ -166,13 +190,13 @@ export default function Purchases() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { date, transactionID, name, sku, status, qty, avatarUrl, cost, tcost} = row;
+                    const { date, name, id, status, qty, avatarUrl, ucost, tcost} = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow
                         hover
-                        key={transactionID}
+                        key={id}
                         tabIndex={-1}
                         role="checkbox"
                         selected={isItemSelected}
@@ -190,16 +214,15 @@ export default function Purchases() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{sku}</TableCell>
-                        <TableCell align="left">{transactionID}</TableCell>
+                        <TableCell align="left">{id}</TableCell>
                         <TableCell align="left">
                           <Label variant="ghost" color={(status === 'Pre-order' ? 'info' : 'success')}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
-                        <TableCell align="left">{qty}</TableCell>
-                        <TableCell align="left">{cost}</TableCell>
-                        <TableCell align="left">{tcost}</TableCell>
+                        <TableCell align="left">{qty} Items</TableCell>
+                        <TableCell align="left">${ucost}</TableCell>
+                        <TableCell align="left">${tcost}</TableCell>
 
                         <TableCell align="right">
                           <UserMoreMenu />

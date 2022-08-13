@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
@@ -6,6 +6,8 @@ import { styled } from '@mui/material/styles';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
 import ResponsiveAppBar from '../../components/NavBar';
+import DataSouce from '../../components/datasource'
+import axios from 'axios';
 
 
 // ----------------------------------------------------------------------
@@ -39,19 +41,29 @@ const MainStyle = styled('div')(({ theme }) => ({
   }
 }));
 
+
+
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout() {
+  const [allData, setAllData] = useState([])
+  useEffect(() => {
+    if (allData.length === 0) {
+      axios.get("https://api.salesstrikecorp.com/inventory/v1/getuserdashboard?email=" + "saihanumanv@gmail.com")
+        .then(res => { console.log(res); setAllData(res.data); localStorage.setItem("allData", JSON.stringify(res.data)) }).catch((err) => { console.log(err) })
+    }
+  }, [allData])
   const [open, setOpen] = useState(false);
+  
 
   return (
     <div>
-      
+
       <RootStyle>
-      <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
+        <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
         <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
         <MainStyle>
-          <Outlet />
+          <Outlet context={[allData, setAllData]} />
         </MainStyle>
       </RootStyle>
     </div>
