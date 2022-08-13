@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ResponsiveAppBar from "./NavBar"
 import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 
 
@@ -36,13 +37,22 @@ const theme = createTheme();
 export default function SignUp() {
     const navigate = useNavigate();
 
+    const [user, setUser] = useState(null)
+    function assingUser(){
+        Auth.currentAuthenticatedUser().then((user2) => {
+          setUser(user2);
+        });
+      }
+    if(!user){assingUser();}
+
+    if(user){navigate("/")}
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         var email = data.get('email')
         var password = data.get('password')
-        Auth.signIn(email, password).then((res)=>{console.log(res); window.location.reload()}).catch((e)=>{console.log(e)})
-        navigate('/')
+        Auth.signIn(email, password).then((res)=>{console.log(res); window.location.reload()}).catch((e)=>{console.log(e); alert(e)})
     };
 
     return (

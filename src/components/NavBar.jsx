@@ -17,6 +17,7 @@ import { Auth } from 'aws-amplify';
 
 
 
+
 const pages = [['Home',"/"], ['Products',"/store"], ['Dashboard',"/dashboard"], ["Contact Us","/contact"]];
 const settings = ['Profile', 'Account', 'Logout'];
 
@@ -24,6 +25,7 @@ const ResponsiveAppBar = () => {
     const [user, setUser] = React.useState(null)
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+
 
     React.useEffect(() => {
         if (user == null){
@@ -38,6 +40,7 @@ const ResponsiveAppBar = () => {
     const handleSignOut = () => {
         Auth.signOut()
         setUser(null)
+        alert("You have been signed out!")
     }
 
     const handleOpenNavMenu = (event) => {
@@ -173,7 +176,7 @@ const ResponsiveAppBar = () => {
                         <Button variant="contained" backgroundColor="gray" 
                         sx = {{display: "flex", size: "small"}}
                         >{
-                            (user==null) ? <Link to="/login">Login</Link> : <Link to="/" onClick={handleSignOut}>Logout</Link>
+                            (user==null) ? <Link to="/login">Login</Link> : <Link to="/login" onClick={handleSignOut}>Logout</Link>
                         }
                         </Button>
                     </Box>
