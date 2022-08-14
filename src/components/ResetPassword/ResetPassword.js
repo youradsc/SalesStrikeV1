@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
@@ -13,11 +14,13 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
-import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { unstable_useEventCallback } from '@mui/utils';
 import { Auth } from 'aws-amplify';
-import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import ErrorHandle from './ErrorHandle';
+import { useState } from 'react';
+import SuccessHandle from './SuccessHandle';
 
 
 function Copyright(props) {
@@ -35,38 +38,21 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-
-export default function CAStep4(props) {
-    let navigate = useNavigate();
-    const [open, setOpen] = React.useState(false);
+export default function ResetPassword() {
+    const navigate = useNavigate()
+    const [open, setOpen] = useState(false)
+    const [open2, setOpen2] = useState(false)
+    const [error, setError] = useState('')
     const handleSubmit = (event) => {
         event.preventDefault();
-        var temp = props.data
-        console.log(temp)
-        axios.post()
-        Auth.signUp({
-            username: temp["Email"],
-            password: temp["Password"],
-            attributes: {
-                email: temp["Email"],
-                phone_number: '+1'+temp["P31"],
-                name: temp["FirstName"] + " " + temp["LastName"]
-            },
-        }).then(res=>{
-            console.log(res)
-            Auth.signIn(temp["Email"], temp["Password"]).then((res)=>{console.log(res)}).catch((e)=>{console.log(e)})
-            alert("Thank you for signing up! Please check your email for a verification link. If you have not recieved it then resend it from the profile page!")
-        }).catch(e=>{alert(e)})
-        var body = {
-            AccountNumber: parseInt(temp["AccountNumber"]),
-            RoutingNumber: parseInt(temp["RoutingNumber"]),
-            BankName: temp["BankHolderName"],
-            Phone: parseInt(temp["P31"]),
-            AccountType: temp["p32"]
-        }
-        axios.post('https://api.salesstrikecorp.com/users/v1/adduserdata?email='+temp["Email"],JSON.stringify(body)).then(res=>{console.log(res);  navigate("../", { replace: true });}).catch(e=>{console.log(e); alert(e)})
-    }
-
+        const data = new FormData(event.currentTarget);
+        var otp = data.get("otp")
+        var password = data.get("Password")
+        var email = data.get("email")
+        Auth.forgotPasswordSubmit(email,otp,password)
+        .then((value)=>{console.log(value);setOpen2(true)})
+        .catch((error)=>{console.log(error); setError(error.toString()); setOpen(true)})
+    };
 
 
 
@@ -88,18 +74,9 @@ export default function CAStep4(props) {
                         }
                     }>
                     <Typography fullWidth component="h1" fontWeight={900} variant="h5" sx={{ marginTop: 2 }}>
-                        User Agreemnt
+                        Fill in the Additional Info
                     </Typography>
-                    <Container disableGutters maxWidth="md" sx={{ px: 2, py: 2, my: 2, display: { xs: "none", md: "block" } }}>
-                        <Stack direction="row" spacing={1} sx={{ display: { xs: "none", sm: "none", md: "flex" }, alignSelf: "center", justifyContent: "space-evenly", border: "1px solid gray" }}>
-                            {(props.data.menu).map(item => (
-                                (item === "Confirmation") ?
-                                    <Button variant="outlined" >{item}</Button> :
-                                    <Button variant="outlined" sx={{ color: "gray" }}>{item}</Button>
-                            ))}
-                        </Stack>
-
-                    </Container>
+                   
                     <Box sx={
                         {
                             display: "flex",
@@ -124,29 +101,53 @@ export default function CAStep4(props) {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <Typography width="100%" variant="p">
-                                            Please open the contracts below and check the box when you have read them.
+                                            Enter your new password and OTP from your email!
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Stack direction="row" sx={{alignItems: "center"}}>
-                                            <IconButton sx={{paddingX:0}} onClick={() => window.open("https://adscv2files.s3.amazonaws.com/miniOrange_User_Agreement.pdf")}>
-                                                <FileOpenIcon></FileOpenIcon>
-                                            </IconButton>
-                                            <Typography variant="body1">User Agreement</Typography>
-                                        </Stack>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="otp"
+                                            label="otp"
+                                            name="otp"
+                                            type="text"
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
-                                    <Stack direction="row" sx={{alignItems: "center"}}>
-                                            <IconButton sx={{paddingX:0}} onClick={() => window.open("https://adscv2files.s3.amazonaws.com/miniOrange_User_Agreement.pdf")}>
-                                                <FileOpenIcon></FileOpenIcon>
-                                            </IconButton>
-                                            <Typography variant="body1">Protection Againt Loss</Typography>
-                                        </Stack>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="email"
+                                            label="email"
+                                            name="email"
+                                            type="email"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="Password"
+                                            label="Password"
+                                            name="Password"
+                                            type="password"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            name="Password2"
+                                            label="Re-Enter Password"
+                                            id="Re-Enter Password"
+                                            autoComplete="Re-Enter Password"
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <FormControlLabel
                                             control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                            label="I Agree to the contracts above"
+                                            label="Rember Me"
                                         />
                                     </Grid>
                                 </Grid>
@@ -154,7 +155,6 @@ export default function CAStep4(props) {
                                     type="submit"
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2, width: { xs: "100%", md: "50%" } }}
-                                    onclick={() => (props.buttonf("Step3"))}
                                 >
                                     Submit
                                 </Button>
@@ -185,10 +185,8 @@ export default function CAStep4(props) {
                                 }
                             }>
                                 <AccountCircleIcon />
-                                <Typography fullWidth variant='h6' fontWeight={600}>{props.data.Type}</Typography>
-                                <IconButton sx={{ p: 0, marginLeft: "auto" }}>
-                                    <EditIcon />
-                                </IconButton>
+                                <Typography fullWidth variant='h6' fontWeight={600}>Reset Passowrd</Typography>
+                                
 
                             </Box>
                             <Box sx={
@@ -205,18 +203,13 @@ export default function CAStep4(props) {
                                 }
                             }>
                                 <PersonIcon sx={{ marginRight: "auto" }} />
-                                <Typography fullWidth variant='p' sx={{ marginRight: "auto" }}>Please Read the Contracts. These are legally binding.</Typography>
+                                <Typography fullWidth variant='p' sx={{ marginRight: "auto" }}>Your data is safe with SalesStrike! In no case will it be shared.</Typography>
                             </Box>
-                            <Button
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2, width: "100%", alignSelf: "left", backgroundColor: "gray", marginTop: "auto" }}
-                                onClick={() => { props.buttonf("Step5") }}
-                            >
-                                Back
-                            </Button>
                         </Box>
                     </Box>
                 </Box>
+                <ErrorHandle open={open} changeState={setOpen} error={error}></ErrorHandle>
+                <SuccessHandle open={open2} changeState={setOpen2}></SuccessHandle>
                 <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>

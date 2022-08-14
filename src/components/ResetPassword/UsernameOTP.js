@@ -15,6 +15,10 @@ import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
 import { Stack } from '@mui/material';
+import { Auth } from 'aws-amplify';
+import { useState } from 'react';
+import ErrorHandle from './ErrorHandle';
+
 
 
 function Copyright(props) {
@@ -32,10 +36,17 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function ResetPassword(props) {
+export default function UserNameOTP(props) {
+    const [open, setOpen] = useState(false)
+    const [error, setError] = useState('')
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        var userName = data.get("email")
+        Auth.forgotPassword(userName).then((value)=>{
+            console.log(value); props.buttonf('Step2')}).catch((error)=>{
+            setError(error.toString());setOpen(true);console.log(error)})
+        
         
     };
 
@@ -86,33 +97,17 @@ export default function ResetPassword(props) {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <Typography width="100%" variant="p">
-                                            Enter your new password!
+                                            Enter your email.
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
                                             required
                                             fullWidth
-                                            id="Password"
-                                            label="Password"
-                                            name="Password"
-                                            type="password"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            name="Password2"
-                                            label="Re-Enter Password"
-                                            id="Re-Enter Password"
-                                            autoComplete="Re-Enter Password"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <FormControlLabel
-                                            control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                            label="Rember Me"
+                                            id="email"
+                                            label="email"
+                                            name="email"
+                                            type="email"
                                         />
                                     </Grid>
                                 </Grid>
@@ -120,9 +115,8 @@ export default function ResetPassword(props) {
                                     type="submit"
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2, width: { xs: "100%", md: "50%" } }}
-                                    onclick={() => (console.log("submit"))}
                                 >
-                                    Submit
+                                    Continue
                                 </Button>
                             </Box>
                         </Box>
@@ -174,6 +168,7 @@ export default function ResetPassword(props) {
                         </Box>
                     </Box>
                 </Box>
+                <ErrorHandle open={open} changeState={setOpen} error={error}></ErrorHandle>
                 <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>
