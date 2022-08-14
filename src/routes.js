@@ -20,7 +20,7 @@ import { CreateAccount } from "./components/CreateAccount";
 import Login from "./components/Login";
 import Home from './components/Home';
 import AddBank from './components/AddBank';
-import ResetPassword from './components/ResetPassword';
+import MainReset from './components/MainReset'
 
 
 // ----------------------------------------------------------------------
@@ -49,7 +49,7 @@ export default function Router() {
         { path: '*', element: <Navigate to="/404" /> },
         {path: 'comingsoon', element: <ComingSoon />},
         {path: 'addbank', element: <AddBank />},
-        {path: 'reset', element: <ResetPassword />}
+        {path: 'reset', element: <MainReset />}
       ],
     },
     { path: '*', element: <Navigate to="/404" replace /> }

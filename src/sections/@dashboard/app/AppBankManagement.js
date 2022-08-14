@@ -10,6 +10,8 @@ import { Typography, Button } from "@mui/material";
 // --- Fill Image Card Component Imports --- //
 import { CardActionArea, Card, CardActions, CardContent, CardMedia } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 // --- Style --- //
 
@@ -21,7 +23,15 @@ export default function AppBankManagement() {
     account: "Wells Fargo",
     total: 453.09
   }
-
+ const [bankData, setBankData] = useState([])
+  useEffect(() => {
+    if (bankData.length === 0) {
+      axios.get("https://api.salesstrikecorp.com/users/v1/getuserdata?email=saihanumanv@gmail.com")
+        .then(res => { console.log(res); setBankData(res.data) }).catch((err) => { console.log(err) })
+    }
+  }, [bankData])
+  
+if(bankData){
   return (
         <Card>
           <CardActionArea>
@@ -40,25 +50,25 @@ export default function AppBankManagement() {
                 variant="h5"
                 component="p"
               >
-                Balance : {data.total}
+                Balance : Check Sales Data
               </Typography>
               <Typography
                 variant="body1"
                 component="p"
               >
-                Account : {data.account}
+                Account : {bankData.BankName}
               </Typography>
               <Typography
                 variant="body1"
                 component="p"
               >
-                Routing Number : {data.routingNumber}
+                Routing Number : {bankData.AccountNumber}
               </Typography>
               <Typography
                 variant="body1"
                 component="p"
               >
-                Account Number : {data.bankNumber}
+                Account Number : {bankData.RoutingNumber}
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -76,5 +86,6 @@ export default function AppBankManagement() {
           </CardActions>
         </Card>
   );
+            }
 }
 
