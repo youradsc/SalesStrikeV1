@@ -39,29 +39,30 @@ export default function DashboardApp() {
   var total = Inventory[Inventory.length - 1]
   console.log(total)
   const data ={
-    ATR: total.TotalDollarsSold,
-    ATC: total.TotalDollarsHeld,
-    PT: total.ProductTurnOver,
-    ROI: total.ROIPercent
+    ATR: "$"+total.TotalDollarsSold,
+    ATC: "$"+total.TotalDollarsHeld,
+    PT: (total.ProductTurnOver)+"%",
+    ROI: total.ROIPercent+"%"
   }
   return (
+
     
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
         </Typography>
-
+    
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="All Time Return" total={"$"+data["ATR"]} icon={'ant-design:android-filled'} />
+            <AppWidgetSummary title="All Time Return" total={data["ATR"]} icon={'ant-design:android-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="All Time Cost" total={"$"+data["ATC"]} color="info" icon={'ant-design:apple-filled'} />
+            <AppWidgetSummary title="All Time Cost" total={data["ATC"]} color="info" icon={'ant-design:apple-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Product Turnover" total={+data["PT"]} color="warning" icon={'ant-design:windows-filled'} />
+            <AppWidgetSummary title="Product Turnover" total={data["PT"]} color="warning" icon={'ant-design:windows-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>

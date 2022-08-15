@@ -119,7 +119,7 @@ export default function ViewStore(props) {
                                     />
                                     <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography gutterBottom variant="h5" component="h2">
-                                            {card.title}
+                                            {card.Name}
                                         </Typography>
                                         <Typography>
                                             <b>SKU:</b> {card.Id}
@@ -128,13 +128,13 @@ export default function ViewStore(props) {
                                             <b>Description: </b> {card.Description}
                                         </Typography>
                                         <Typography>
-                                            <b>Wholesale: </b> {card.Wholesale}
+                                            <b>Wholesale: </b> {"$"+card.Wholesale}
                                         </Typography>
                                         <Typography>
-                                            <b>MSRP: $</b> {card.MSRP}
+                                            <b>MSRP: </b> {"$"+card.MSRP}
                                         </Typography>
                                         <Typography>
-                                            <b>Profit: </b> {card.Profit}
+                                            <b>ProfitShare: </b> {"$"+((card.MSRP-card.Wholesale)*(card.UserProfitFactor-0.05)).toFixed(2)+"-$"+((card.MSRP-card.Wholesale)*(card.UserProfitFactor+0.05)).toFixed(2)+" per unit sold"}
                                         </Typography>
                                         <Typography>
                                             <b>Idea Score: </b> {card.Rating}

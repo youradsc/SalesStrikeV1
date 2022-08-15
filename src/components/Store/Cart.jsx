@@ -32,7 +32,7 @@ export default function Cart(props) {
             <Card sx={{ display: "flex", flexDirection: "row" }}>
                 <CardMedia sx={{ aspectRatio: "1/1", width: "20%", height: "100%", objectFit: "scale", objectPosition: "center" }}
                     component="img"
-                    image="https://source.unsplash.com/random"
+                    image={props.data.Image}
                     alt="Live from space album cover"
                 />
                 <CardContent sx={{ display: "flex", flexGrow: 1, alignSelf: "stretch" }}>
@@ -103,7 +103,7 @@ export default function Cart(props) {
                         Fill in your Bank Info (Optional)
                     </Typography>
                     <Typography fullWidth component="h5" fontWeight={500} variant="h5" sx={{ marginY: 2 }}>
-                        On the left is a risk calculator to understand your profit and loss. On the right is your cart with all your items.
+                        On the right is a risk calculator coming soon. On the left is your cart with all your items.
                     </Typography>
                     <Box sx={
                         {
@@ -151,10 +151,10 @@ export default function Cart(props) {
                         <Box
                             component="img"
                             sx={{
-                                maxWidth: "100%", aspectRatio: "1/1"
+                                maxWidth: "50%", aspectRatio: "1/1"
                             }}
                             alt="The house from the offer."
-                            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+                            src="https://salesstrikewebimages.s3.amazonaws.com/riskcalcularorcoming.jpg"
                         />
                     </Box>
                     <Box display="flex" sx={{ flexDirection: { xs: "colum", md: "row" } }}>
