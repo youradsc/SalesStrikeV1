@@ -1,5 +1,5 @@
 import ResponsiveAppBar from "./NavBar"
-
+//issue fixed
 export default function Home() {
     console.log("Home")
     return <div style={{height:"100%"}}><ResponsiveAppBar/><div style={{position: "relative",
