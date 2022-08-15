@@ -80,7 +80,7 @@ export default function Purchases() {
   console.log(Orders)
   Products = Object.values(Products)
   useEffect(()=>{
-    if(tableData.length === 0){
+    if(Orders !== null){
     Orders.map((order)=>{
       console.log("hit")
       var tempid = order.ID
@@ -96,7 +96,7 @@ export default function Purchases() {
       outTemp.tcost = order.TotalCost;
       setTableData(oldData => [...oldData, outTemp])
     })}
-  },[tableData])
+  },[])
   const USERLIST = tableData
 
   const [page, setPage] = useState(0);

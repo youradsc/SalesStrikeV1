@@ -9,7 +9,7 @@ import ResponsiveAppBar from '../../components/NavBar';
 import DataSouce from '../../components/datasource'
 import axios from 'axios';
 import { Auth } from 'aws-amplify';
-
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -48,13 +48,16 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [allData, setAllData] = useState([])
+  const [user, setUser] = useState(null)
+  const navigate = useNavigate()
+  Auth.currentAuthenticatedUser().then(console.log("logged in")).catch((e)=>{console.log(e);navigate("/")})
   useEffect(() => {
     Auth.currentUserInfo().then((res)=>{
-    if (allData.length === 0) {
+    
       axios.get("https://api.salesstrikecorp.com/inventory/v1/getuserdashboard?email=" + res.username)
         .then(res => { console.log(res); setAllData(res.data); localStorage.setItem("allData", JSON.stringify(res.data)) }).catch((err) => { console.log(err) })
-    }})
-  }, [allData])
+    })
+  }, [])
   const [open, setOpen] = useState(false);
   
 

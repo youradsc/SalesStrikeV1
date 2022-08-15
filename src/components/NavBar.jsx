@@ -18,7 +18,8 @@ import { Auth } from 'aws-amplify';
 
 
 
-const pages = [['Home',"/"], ['Products',"/store"], ['Dashboard',"/dashboard"], ["Contact Us","/contact"]];
+const pages = [['Home',"/"], ['Products',"/store"], ['Dashboard',"/dashboard/app"], ["Contact Us","/contact"]];
+const pages2 = [['Home',"/"], ['Products',"/viewstore"], ["Contact Us","/contact"]];
 const settings = ['Profile', 'Account', 'Logout'];
 
 const ResponsiveAppBar = () => {
@@ -40,7 +41,6 @@ const ResponsiveAppBar = () => {
     const handleSignOut = () => {
         Auth.signOut()
         setUser(null)
-        alert("You have been signed out!")
     }
 
     const handleOpenNavMenu = (event) => {
@@ -108,9 +108,25 @@ const ResponsiveAppBar = () => {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
+                            {user ? pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
+                                    <Button
+                                key={page[0]}
+                                onClick={handleCloseNavMenu}
+                                sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                 <Link className="navbar-link-text inter-medium-mischka-14px" to={page[1]}>{page[0]}</Link>
+                            </Button>
+                                </MenuItem>
+                            )) : pages2.map((page) => (
+                                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                    <Button
+                                key={page[0]}
+                                onClick={handleCloseNavMenu}
+                                sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                 <Link className="navbar-link-text inter-medium-mischka-14px" to={page[1]}>{page[0]}</Link>
+                            </Button>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -133,7 +149,15 @@ const ResponsiveAppBar = () => {
                         SalesStrike
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: "center" }}>
-                        {pages.map((page) => (
+                        {user ? pages.map((page) => (
+                            <Button
+                                key={page[0]}
+                                onClick={handleCloseNavMenu}
+                                sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                 <Link className="navbar-link-text inter-medium-mischka-14px" to={page[1]}>{page[0]}</Link>
+                            </Button>
+                        )) : pages2.map((page) => (
                             <Button
                                 key={page[0]}
                                 onClick={handleCloseNavMenu}

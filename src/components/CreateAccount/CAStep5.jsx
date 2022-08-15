@@ -112,7 +112,7 @@ export default function CAStep4(props) {
                                             label="Bank Holder Name"
                                             name="Bank Holder Name"
                                             type="Bank Holder Name"
-                                            defaultValue="Optional"
+                                            defaultValue=""
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -122,7 +122,7 @@ export default function CAStep4(props) {
                                             name="Account Number"
                                             label="Account Number"
                                             id="Account Number"
-                                            defaultValue="Optional"
+                                            defaultValue="0"
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -132,7 +132,7 @@ export default function CAStep4(props) {
                                             name="Routing Number"
                                             label="Routing Number"
                                             id="Routing Number"
-                                            defaultValue="Optional"
+                                            defaultValue="0"
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

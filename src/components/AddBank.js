@@ -18,6 +18,9 @@ import { Stack } from '@mui/material';
 import { Auth } from 'aws-amplify';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import ErrorHandleBank from './PopUps/ErrorHandleBank';
+import SuccessHandleBank from './PopUps/SuccessHandleBank';
+import { useState } from 'react';
 
 
 function Copyright(props) {
@@ -37,6 +40,9 @@ const theme = createTheme();
 
 export default function AddBank() {
     let navigate = useNavigate()
+    const [open, setOpen] = useState(false)
+    const [open2, setOpen2] = useState(false)
+    const [error, setError] = useState('')
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget)
@@ -52,7 +58,7 @@ export default function AddBank() {
             BankName: holderName
         }
         Auth.currentUserInfo().then((res) => {
-            axios.post('https://api.salesstrikecorp.com/users/v1/adduserdata?email='+res.username,JSON.stringify(body)).then(res=>{console.log(res);  navigate("../", { replace: true });}).catch(e=>{console.log(e); alert(e)})
+            axios.post('https://api.salesstrikecorp.com/users/v1/adduserdata?email='+res.username,JSON.stringify(body)).then(res=>{console.log(res);  setOpen2(true);}).catch(e=>{console.log(e); setError(e.toStrin()); setOpen(true)})
         })
     };
 
@@ -201,6 +207,8 @@ export default function AddBank() {
                         </Box>
                     </Box>
                 </Box>
+                <ErrorHandleBank open={open} changeState={setOpen} error={error}></ErrorHandleBank>
+                <SuccessHandleBank open={open2} changeState={setOpen2}></SuccessHandleBank>
                 <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>

@@ -76,10 +76,9 @@ function applySortFilter(array, comparator, query) {
 export default function Sales() {
   const [tableData, setTableData] = useState([]);
   var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
-  
   Products = Object.values(Products)
   useEffect(()=>{
-    if(tableData.length === 0){
+    if(Sales !== null){
     Sales.map((sale)=>{
       var tempid = sale.ID
       var productData = Products.filter((productData)=>(productData.Id === tempid))[0]
@@ -97,7 +96,7 @@ export default function Sales() {
       console.log(outTemp)
       setTableData(oldData => [...oldData, outTemp])
     })}
-  },[tableData])
+  },[])
   console.log(tableData)
   const USERLIST = tableData
   

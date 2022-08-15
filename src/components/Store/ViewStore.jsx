@@ -17,6 +17,9 @@ import { useState, useEffect } from 'react'
 import { DialogTitle } from '@mui/material';
 import { Dialog } from '@mui/material';
 import axios from 'axios'
+import ResponsiveAppBar from '../NavBar';
+import { useNavigate } from 'react-router-dom';
+
 
 function Copyright() {
     return (
@@ -35,54 +38,22 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const theme = createTheme();
 
-export default function Store(props) {
-    const [cartPop, setCartPop] = useState(false)
+export default function ViewStore(props) {
+    const navigate = useNavigate()
     const [prods, setProds] = useState([])
-    const handleClose = () => {
-        setCartPop(false)
-    };
+
     React.useEffect(() => {
         if(prods.length == 0) {
                 axios.get('https://api.salesstrikecorp.com/products/v1/getproducts').then((res)=>{console.log(res);setProds(Object.values(res.data))})
             }
         },[prods]
     )
-    
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        var id = event.target.querySelector("input").getAttribute('id');
-        console.log(id)
-        var qty = data.get("Qty");
-        var currCart = (props.theCart);
-        console.log(prods)
-        var newStuff = (prods).filter((card) => (
-            card.Id === id
-        ));
-        console.log(newStuff)
-        var updateQuant = newStuff[0]
-        updateQuant["Qty"] = qty
-        var i = 0;
-        var old = false;
-        (props.theCart).forEach(element => {
-            if (element.Id == id) {
-                var temp = element
-                temp["Qty"] = (parseInt(temp["Qty"])+parseInt(qty)).toString()
-                var replace = props.theCart
-                replace[i] = temp
-                props.setTheCart(replace)
-                old = true;
-            }
-        })
-        if (!old) {
-            props.setTheCart([...props.theCart, updateQuant])
-        }
-        setCartPop(true);
-    }
 
 
 
     return (
+        <div>
+            <ResponsiveAppBar/>
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <main>
@@ -110,7 +81,7 @@ export default function Store(props) {
                             Store
                         </Typography>
                         <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                            Here you can look through all the products we have available. You can add everything to cart and click the cart button at the end to checkout.
+                            Here you can look through all the products we have available. If you want to invest in a product sign up now!
                         </Typography>
 
                     </Container>
@@ -118,15 +89,14 @@ export default function Store(props) {
                     <Stack
                         direction="row"
                         spacing={2}
-                        justifyContent="space-between"
+                        justifyContent="center"
                         pt={2}
                         width="100%"
                         sx={{ maxWidth: { md: "md", lg: "lg" }, px: { sm: 3, lg: 3 } }}
                     //sx={{justifySelf:"center",maxWidth:"sm"}}
                     >
 
-                        <Button variant="outlined" onClick={()=>props.setTheCart([])}>Clear Cart</Button>
-                        <Button variant="contained" onClick={()=>props.setP("Cart")}>View Cart / Checkout</Button>
+                        <Button variant="outlined" onClick={()=>(navigate("/signup"))}>SignUp Now</Button>
                     </Stack>
 
                 </Box>
@@ -149,7 +119,7 @@ export default function Store(props) {
                                     />
                                     <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography gutterBottom variant="h5" component="h2">
-                                            {card.Name}
+                                            {card.title}
                                         </Typography>
                                         <Typography>
                                             <b>SKU:</b> {card.Id}
@@ -170,24 +140,6 @@ export default function Store(props) {
                                             <b>Idea Score: </b> {card.Rating}
                                         </Typography>
                                     </CardContent>
-                                    <CardActions disableSpacing={true}>
-                                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "flex-start", md: "center" }, width: "100%" }}>
-                                            <TextField sx={{ width: { xs: "100%", md: "50%" } }} id={card.Id} label="Qty" name="Qty" variant="outlined" />
-                                            <Button
-                                                size="small"
-                                                type="submit"
-                                                variant="contained"
-                                                sx={{ mt: 3, mb: 2, width: { xs: "100%", md: "30%" }, marginLeft: { xs: "auto" } }}
-                                                onClick={() => (console.log("done"))}
-                                            >
-                                                Add to cart
-                                            </Button>
-                                        </Box>
-                                    </CardActions>
-                                    <CardActions disableSpacing={true}>
-                                        <Button size="small">View</Button>
-                                        <Button size="small" sx={{ marginLeft: "auto" }}>Edit</Button>
-                                    </CardActions>
                                 </Card>
                             </Grid>
                         ))}
@@ -210,12 +162,9 @@ export default function Store(props) {
                 <Copyright />
             </Box>
             {/* End footer */}
-            <Dialog open={cartPop} onClose={handleClose} sx={{padding:2}} >
-                <DialogTitle sx={{padding:2, textAlign:"center"}} >Added to Cart</DialogTitle>
-                <Typography sx={{padding:2}}>Your item has been added to cart!</Typography>
-                <Button variant="contained" sx={{margin:2}} onClick={() => props.setP("Cart")}>View Cart</Button>
-            </Dialog>
+            
         </ThemeProvider>
+        </div>
     );
     const cardData = [
         {

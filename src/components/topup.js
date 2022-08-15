@@ -140,7 +140,7 @@ export default function Topup() {
         <Card>
         <Stack direction="row" alignItems="center" justifyContent="space-between" margin={3}>
           <Typography variant="h4" gutterBottom>
-            Top Up
+            Suggested Products
           </Typography>
           <Button variant="contained" component={RouterLink} to="/store" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Product

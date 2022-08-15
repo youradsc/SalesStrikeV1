@@ -80,7 +80,7 @@ export default function Inventory() {
   var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
   Products = Object.values(Products)
   useEffect(()=>{
-    if(tableData.length === 0){
+    if(Inventory.length>1){
     Inventory.map((inventory)=>{
       if(inventory.Name !== "Total"){
         console.log(inventory.Name)
@@ -101,7 +101,7 @@ export default function Inventory() {
         setTableData(oldData => [...oldData, outTemp])
       }
     })}
-  },[tableData])
+  },[])
   console.log(tableData)
   const USERLIST = tableData
 

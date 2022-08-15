@@ -12,6 +12,7 @@ import { CardActionArea, Card, CardActions, CardContent, CardMedia } from "@mui/
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Auth } from "aws-amplify";
 
 // --- Style --- //
 
@@ -25,11 +26,10 @@ export default function AppBankManagement() {
   }
  const [bankData, setBankData] = useState([])
   useEffect(() => {
-    if (bankData.length === 0) {
-      axios.get("https://api.salesstrikecorp.com/users/v1/getuserdata?email=saihanumanv@gmail.com")
-        .then(res => { console.log(res); setBankData(res.data) }).catch((err) => { console.log(err) })
-    }
-  }, [bankData])
+    Auth.currentUserInfo().then((res)=>{
+      axios.get("https://api.salesstrikecorp.com/users/v1/getuserdata?email="+res.username)
+        .then(res => { console.log(res); setBankData(res.data) }).catch((err) => { console.log(err) })})
+  }, [])
   
 if(bankData){
   return (

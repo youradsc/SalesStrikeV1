@@ -18,6 +18,9 @@ import { Stack } from '@mui/material';
 import { Auth } from 'aws-amplify';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import SuccessHandleSignUp from '../PopUps/SuccessHandleSignUp';
+import ErrorHandleSignUp from '../PopUps/ErrorHandleSignUp';
+import { useState } from 'react';
 
 
 function Copyright(props) {
@@ -37,8 +40,10 @@ const theme = createTheme();
 
 
 export default function CAStep4(props) {
-    let navigate = useNavigate();
-    const [open, setOpen] = React.useState(false);
+    let navigate = useNavigate()
+    const [open, setOpen] = useState(false)
+    const [open2, setOpen2] = useState(false)
+    const [error, setError] = useState('')
     const handleSubmit = (event) => {
         event.preventDefault();
         var temp = props.data
@@ -54,17 +59,33 @@ export default function CAStep4(props) {
             },
         }).then(res=>{
             console.log(res)
-            Auth.signIn(temp["Email"], temp["Password"]).then((res)=>{console.log(res)}).catch((e)=>{console.log(e)})
-            alert("Thank you for signing up! Please check your email for a verification link. If you have not recieved it then resend it from the profile page!")
-        }).catch(e=>{alert(e)})
+            //Auth.signIn(temp["Email"], temp["Password"]).then((res)=>{console.log(res)}).catch((e)=>{console.log(e)})
+            //alert("Thank you for signing up! Please check your email for a verification link. If you have not recieved it then resend it from the profile page!")
+            setOpen2(true)
+        }).catch(e=>{setError(e.toString());setOpen(true); console.log(e)})
         var body = {
-            AccountNumber: parseInt(temp["AccountNumber"]),
-            RoutingNumber: parseInt(temp["RoutingNumber"]),
+            //AccountNumber: parseInt(temp["AccountNumber"]),
+            //RoutingNumber: parseInt(temp["RoutingNumber"]),
             BankName: temp["BankHolderName"],
-            Phone: parseInt(temp["P31"]),
+            //Phone: parseInt(temp["P31"]),
             AccountType: temp["p32"]
         }
-        axios.post('https://api.salesstrikecorp.com/users/v1/adduserdata?email='+temp["Email"],JSON.stringify(body)).then(res=>{console.log(res);  navigate("../", { replace: true });}).catch(e=>{console.log(e); alert(e)})
+
+        if(!isNaN(parseInt(temp["AccountNumber"])))
+        {
+            body.AccountNumber = parseInt(temp["AccountNumber"])
+        }
+        if(!isNaN(parseInt(temp["RoutingNumber"])))
+        {
+            body.RoutingNumber = parseInt(temp["RoutingNumber"])
+        }
+        if(!isNaN(parseInt(temp["P31"])))
+        {
+            body.Phone = parseInt(temp["P31"])
+        }
+        
+
+        axios.post('https://api.salesstrikecorp.com/users/v1/adduserdata?email='+temp["Email"],JSON.stringify(body)).then(res=>{console.log(res);}).catch(e=>{console.log(e); alert(e)})
     }
 
 
@@ -154,7 +175,6 @@ export default function CAStep4(props) {
                                     type="submit"
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2, width: { xs: "100%", md: "50%" } }}
-                                    onclick={() => (props.buttonf("Step3"))}
                                 >
                                     Submit
                                 </Button>
@@ -217,6 +237,8 @@ export default function CAStep4(props) {
                         </Box>
                     </Box>
                 </Box>
+                <ErrorHandleSignUp open={open} changeState={setOpen} error={error}></ErrorHandleSignUp>
+                <SuccessHandleSignUp open={open2} changeState={setOpen2}></SuccessHandleSignUp>
                 <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>

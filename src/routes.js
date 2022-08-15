@@ -21,6 +21,9 @@ import Login from "./components/Login";
 import Home from './components/Home';
 import AddBank from './components/AddBank';
 import MainReset from './components/MainReset'
+import Protected from './layouts/Protected';
+import ViewStore from './components/Store/ViewStore';
+import ContactUs from './components/ContactUs';
 
 
 // ----------------------------------------------------------------------
@@ -42,15 +45,23 @@ export default function Router() {
       element: <LogoOnlyLayout />,
       children: [
         { path: '/', element: <Home /> },
-        { path: 'store', element: <MainStore /> },
+        { path: "viewstore", element: <ViewStore/>},
         { path: 'signup', element: <CreateAccount /> },
         { path: 'login', element: <Login /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
         {path: 'comingsoon', element: <ComingSoon />},
-        {path: 'addbank', element: <AddBank />},
-        {path: 'reset', element: <MainReset />}
+        {path: 'reset', element: <MainReset />},
+        {path: "contact", element: <ContactUs />}
       ],
+    },
+    {
+      path: '/',
+      element: <Protected />,
+      children: [
+        {path: 'addbank', element: <AddBank />},
+        { path: 'store', element: <MainStore /> },
+      ]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
   ]);
