@@ -22,12 +22,18 @@ import {
 import Topup from '../components/topup';
 import { useOutletContext } from "react-router-dom";
 import { useState } from 'react';
+import { Auth } from 'aws-amplify';
+import axios from 'axios';
 
 
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
+  Auth.currentUserInfo().then((res)=>{
+    axios.get("https://api.salesstrikecorp.com/inventory/v1/getuserdashboard?email=" + res.username)
+      .then(res => { console.log(res); localStorage.setItem("allData", JSON.stringify(res.data)) }).catch((err) => { console.log(err) })
+  })
   const theme = useTheme();
   var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
   var total = Inventory[Inventory.length - 1]

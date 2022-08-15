@@ -51,13 +51,11 @@ export default function DashboardLayout() {
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
   Auth.currentAuthenticatedUser().then(console.log("logged in")).catch((e)=>{console.log(e);navigate("/")})
-  useEffect(() => {
+    console.log("hit")
     Auth.currentUserInfo().then((res)=>{
-    
       axios.get("https://api.salesstrikecorp.com/inventory/v1/getuserdashboard?email=" + res.username)
-        .then(res => { console.log(res); setAllData(res.data); localStorage.setItem("allData", JSON.stringify(res.data)) }).catch((err) => { console.log(err) })
+        .then(res => { console.log(res); localStorage.setItem("allData", JSON.stringify(res.data)) }).catch((err) => { console.log(err) })
     })
-  }, [])
   const [open, setOpen] = useState(false);
   
 
