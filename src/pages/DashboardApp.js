@@ -30,12 +30,12 @@ import axios from 'axios';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
-  Auth.currentUserInfo().then((res)=>{
-    axios.get("https://api.salesstrikecorp.com/inventory/v1/getuserdashboard?email=" + res.username)
-      .then(res => { console.log(res); localStorage.setItem("allData", JSON.stringify(res.data)) }).catch((err) => { console.log(err) })
-  })
   const theme = useTheme();
   var {Inventory, Orders, Products, Sales} = JSON.parse(localStorage.getItem("allData"))
+  if (Inventory === null)
+  {
+    window.location.reload();
+  }
   var total = Inventory[Inventory.length - 1]
   console.log(total)
   const data ={
