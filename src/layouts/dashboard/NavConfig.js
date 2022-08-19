@@ -33,7 +33,7 @@ const navConfig = [
   },
   {
     title: 'Add Bank Info',
-    path: '/404',
+    path: '/addbank',
     icon: getIcon('eva:person-add-fill'),
   }
 ];

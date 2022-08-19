@@ -56,6 +56,7 @@ export default function Store(props) {
         var qty = data.get("Qty");
         var currCart = (props.theCart);
         console.log(prods)
+        var img = ""
         var newStuff = (prods).filter((card) => (
             card.Id === id
         ));
@@ -158,13 +159,13 @@ export default function Store(props) {
                                             <b>Description: </b> {card.Description}
                                         </Typography>
                                         <Typography>
-                                            <b>Wholesale: </b> {card.Wholesale}
+                                            <b>Wholesale: </b> {"$"+card.Wholesale}
                                         </Typography>
                                         <Typography>
-                                            <b>MSRP: $</b> {card.MSRP}
+                                            <b>MSRP: </b> {"$"+card.MSRP}
                                         </Typography>
                                         <Typography>
-                                            <b>Profit: </b> {card.Profit}
+                                            <b>ProfitShare: </b> {"$"+((card.MSRP-card.Wholesale)*(card.UserProfitFactor-0.05)).toFixed(2)+"-$"+((card.MSRP-card.Wholesale)*(card.UserProfitFactor+0.05)).toFixed(2)+" per unit sold"}
                                         </Typography>
                                         <Typography>
                                             <b>Idea Score: </b> {card.Rating}
