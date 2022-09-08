@@ -100,7 +100,7 @@ export default function Cart(props) {
 
                     }>
                     <Typography fullWidth component="h1" fontWeight={900} variant="h5" sx={{ marginTop: 2 }}>
-                        Fill in your Bank Info (Optional)
+                        Cart
                     </Typography>
                     <Typography fullWidth component="h5" fontWeight={500} variant="h5" sx={{ marginY: 2 }}>
                         On the right is a risk calculator coming soon. On the left is your cart with all your items.
